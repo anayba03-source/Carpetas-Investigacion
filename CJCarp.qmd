@@ -297,9 +297,15 @@ carpetas.to_csv("Data/Procesada/carpetas_procesadas.csv")
 ```
 
 ```{python, include=FALSE}
-carpetas.to_file("Data/Procesada/carpetas_procesadas.gpkg", driver="GPKG", layer="carpetas_procesadas")
-```
+cols_necesarias = ["anio_inicio", "mes_inicio", "fecha_inicio", "hora_inicio",
+                   "anio_hecho", "mes_hecho", "fecha_hecho", "hora_hecho",
+                   "delito", "categoria_delito", "latitud", "longitud",
+                   "sector_id", "cuadrante", "alcaldia", "sector", "geometry"]
 
+carpetas[cols_necesarias].to_file(
+    "Data/Procesada/carpetas_procesadas.gpkg", driver="GPKG", layer="carpetas_procesadas"
+)
+```
 ```{python}
 print(carpetas.columns.tolist())
 print(carpetas.categoria_delito.value_counts())
