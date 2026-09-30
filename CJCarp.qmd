@@ -291,6 +291,57 @@ carpetas['cuadrante']= cuadrante_por_carpeta
 carpetas["alcaldia"]= carpetas.sector.map(sectores.alcaldi)
 ```
 
+```{python}
+# Recuperamos la columna de colonia, perdida en la limpieza inicial,
+# usando el índice para alinearla correctamente con las filas que sí quedaron
+if local_file.exists():
+    carpetas_original = pd.read_csv(local_file)
+else:
+    carpetas_original = pd.read_csv(url)
+
+carpetas["colonia"] = carpetas_original.loc[carpetas.index, "colonia_hecho"]
+
+print(carpetas["colonia"].isna().sum())
+```
+
+```{python}
+carpetas.head()
+```
+
+
+```{python}
+# Recuperamos la columna de colonia, perdida en la limpieza inicial,
+# usando el índice para alinearla correctamente con las filas que sí quedaron
+if local_file.exists():
+    carpetas_original = pd.read_csv(local_file)
+else:
+    carpetas_original = pd.read_csv(url)
+
+carpetas["colonia"] = carpetas_original.loc[carpetas.index, "colonia_hecho"]
+
+print(carpetas["colonia"].isna().sum())
+```
+
+
+```{python}
+carpetas.head()
+```
+
+```{python}
+carpetas_export = carpetas.rename(columns={"sector": "sector_id", "colonia": "sector"})
+
+cols_necesarias = ["anio_inicio", "mes_inicio", "fecha_inicio", "hora_inicio",
+                   "anio_hecho", "mes_hecho", "fecha_hecho", "hora_hecho",
+                   "delito", "categoria_delito", "latitud", "longitud",
+                   "sector_id", "cuadrante", "alcaldia", "sector", "geometry"]
+
+carpetas_export[cols_necesarias].to_csv("Data/Data/Procesada/carpetas_procesadas.csv")
+
+carpetas_export[cols_necesarias].to_file(
+    "Data/Procesada/carpetas_procesadas.gpkg", driver="GPKG", layer="carpetas_procesadas"
+)
+```
+
 ```{python, include=FALSE}
 # Guardamos carpetas con etiqueta de sector en un CSV
 carpetas.to_csv("Data/Procesada/carpetas_procesadas.csv")
